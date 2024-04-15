@@ -1,6 +1,0 @@
-@Calendaurus.API_HostAddress = http://localhost:5066
-
-GET {{Calendaurus.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
