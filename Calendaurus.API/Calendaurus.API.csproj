@@ -10,9 +10,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Calendaurus.Models\Calendaurus.Models.csproj" />
-    <ProjectReference Include="..\Calendaurus.Services\Calendaurus.Services.csproj" />
-  </ItemGroup>
-
 </Project>
