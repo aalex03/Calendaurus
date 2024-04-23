@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Calendaurus.Models;
 
 namespace Calendaurus.Services;
@@ -55,6 +56,11 @@ public class CalendarEntryRepository<T> : IRepository<CalendarEntry>
     public Task<CalendarEntry?> GetAsync(Guid id)
     {
         return Task.FromResult(_calendarEntries.FirstOrDefault(x => x.Id == id));
+    }
+
+    public Task<IEnumerable<CalendarEntry>> GetAsync(Expression<Func<CalendarEntry,bool>> predicate)
+    {
+        return Task.FromResult(_calendarEntries.Where(predicate.Compile()).AsEnumerable());
     }
 
     public Task<CalendarEntry?> UpdateAsync(CalendarEntry entity)
