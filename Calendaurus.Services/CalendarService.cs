@@ -10,18 +10,33 @@ public class CalendarService : ICalendarService
         _repository = repository;
     }
     
-    public Task<CalendarEntry> CreateAsync(CalendarEntry entry)
+    public async Task<CalendarEntry?> CreateAsync(CalendarEntry entry)
     {
-        throw new NotImplementedException();
+        var calendarEntries = await _repository.GetAsync(x => x.Location == entry.Location && (entry.Start >= x.Start && entry.End <= x.End));
+        if(calendarEntries.Any())
+        {
+            return null;
+        }
+        return await _repository.CreateAsync(entry);
     }
 
     public Task<bool> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return _repository.DeleteAsync(id);
     }
 
-    public Task<CalendarEntry> UpdateAsync(CalendarEntry entry)
+    public Task<IEnumerable<CalendarEntry>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return _repository.GetAllAsync();
+    }
+
+    public Task<CalendarEntry?> GetAsync(Guid id)
+    {
+        return _repository.GetAsync(id);
+    }
+
+    public Task<CalendarEntry?> UpdateAsync(CalendarEntry entry)
+    {
+        return _repository.UpdateAsync(entry);
     }
 }

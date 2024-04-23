@@ -5,46 +5,62 @@ using Calendaurus.Services;
 using Microsoft.AspNetCore.Mvc;
 [ApiController]
 [Route("api/[controller]")]
-public class CalendaurusController : ControllerBase
+public class CalendarController : ControllerBase
 {
-    private readonly IRepository<CalendarEntry> _repository;
-    public CalendaurusController(IRepository<CalendarEntry> repository)
+    private readonly ICalendarService _calendarService;
+    public CalendarController(ICalendarService calendarService)
     {
-        _repository = repository;
+        _calendarService = calendarService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        return Ok(await _repository.GetAllAsync());
+        var result = await _calendarService.GetAllAsync();
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
-        var result = await _repository.GetAsync(id);
-        return result is null ? NotFound() : Ok(result);
+        var result = await _calendarService.GetAsync(id);
+        if (result == null)
+        {
+            return NotFound();
+        }
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CalendarEntry entry)
     {
-        return Ok(await _repository.CreateAsync(entry));
+        var result = await _calendarService.CreateAsync(entry);
+        if (result == null)
+        {
+            return BadRequest();
+        }
+        return Ok(result);
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CalendarEntry entry)
     {
-        if(id != entry.Id)
+        var result = await _calendarService.UpdateAsync(entry);
+        if (result == null)
         {
             return BadRequest();
         }
-        return Ok(await _repository.UpdateAsync(entry));
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        return Ok(await _repository.DeleteAsync(id));
+        var result = await _calendarService.DeleteAsync(id);
+        if (!result)
+        {
+            return BadRequest();
+        }
+        return Ok();
     }
 }
