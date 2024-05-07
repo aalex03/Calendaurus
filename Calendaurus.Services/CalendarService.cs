@@ -10,7 +10,7 @@ public class CalendarService : ICalendarService
         _repository = repository;
     }
     
-    public async Task<CalendarEntry?> CreateAsync(CalendarEntry entry)
+    public async Task<CalendarEntry?> CreateAsync(CalendarEntry entry, Guid userId)
     {
         var calendarEntries = await _repository.GetAsync(x => x.Location == entry.Location && (entry.Start >= x.Start && entry.End <= x.End));
         if(calendarEntries.Any())

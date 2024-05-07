@@ -17,5 +17,7 @@ namespace Calendaurus.Models
         public short Type { get; set; }
         [StringLength(200)]
         public string? Location { get; set; }
+        public Guid UserId { get; set; }
+        public User User { get; set; } = default!;
     }
 }
