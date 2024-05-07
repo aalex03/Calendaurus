@@ -22,12 +22,7 @@ public class CalendarController : ControllerBase
     {
         var currentUser = User.Identity!.Name!;
         var user = await _userRepository.GetByEmailAsync(currentUser);
-        if(user is null)
-        {
-            return BadRequest();
-        }
-        var result = await _calendarService.GetAllAsync();
-        return Ok(result);
+        return user is null ? BadRequest() : Ok(await _calendarService.GetAllAsync());
     }
 
     [HttpGet("{id}")]
@@ -35,11 +30,7 @@ public class CalendarController : ControllerBase
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var result = await _calendarService.GetAsync(id);
-        if (result == null)
-        {
-            return NotFound();
-        }
-        return Ok(result);
+        return result is null ? BadRequest() : Ok(result);
     }
 
     [HttpPost]
@@ -47,33 +38,20 @@ public class CalendarController : ControllerBase
     {
         var currentUser = User.Identity!.Name!;
         var user = await _userRepository.GetByEmailAsync(currentUser);
-        var result = await _calendarService.CreateAsync(entry, user.Id);
-        if (result == null)
-        {
-            return BadRequest();
-        }
-        return Ok(result);
+        return user is null ? BadRequest() : Ok(await _calendarService.CreateAsync(entry,user.Id));
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CalendarEntry entry)
     {
         var result = await _calendarService.UpdateAsync(entry);
-        if (result == null)
-        {
-            return BadRequest();
-        }
-        return Ok(result);
+        return result is null ? BadRequest() : Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = await _calendarService.DeleteAsync(id);
-        if (!result)
-        {
-            return BadRequest();
-        }
-        return Ok();
+        return result is false ? BadRequest() : Ok();
     }
 }
