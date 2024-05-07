@@ -22,7 +22,7 @@ public class CalendarEntryEfRepository<T> : IRepository<CalendarEntry>
     {
         var result = _context.CalendarEntries.Remove(new CalendarEntry { Id = id });
         await _context.SaveChangesAsync();
-        return result.State == EntityState.Deleted;
+        return result.State is EntityState.Deleted;
     }
 
     public async Task<IEnumerable<CalendarEntry>> GetAllAsync()
