@@ -1,19 +1,41 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+// Import React and ReactDOM for rendering React components into the DOM
+import React from "react";
+import ReactDOM from "react-dom/client";
 
+// Import CSS styles for the application
+import "./index.css";
+
+// Import the root component of the application
+import App from "./App";
+
+// Import the function to report web vitals
+import reportWebVitals from "./reportWebVitals";
+
+// Import BrowserRouter to enable routing in the application
+import { BrowserRouter, BrowserRouter as Router } from "react-router-dom";
+
+// Import LocalizationProvider and AdapterDayjs for date and time localization
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+// Create a root for ReactDOM to render the application
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+	document.getElementById("root") as HTMLElement
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Render the application inside React.StrictMode to enable additional checks and warnings
+root.render(
+	<React.StrictMode>
+		{/* Wrap the application with Router for enabling routing */}
+		<BrowserRouter>
+			{/* Provide localization capabilities to the application */}
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				{/* Render the main App component */}
+				<App />
+			</LocalizationProvider>
+		</BrowserRouter>
+	</React.StrictMode>
+);
+
+// Measure and report web vitals to improve performance
 reportWebVitals();
