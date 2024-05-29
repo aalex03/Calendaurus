@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Calendar } from "../Components/Calendar";
 import { Header } from "../Components/Header";
 import dayjs from "dayjs";
+import { mocks } from "../mocks";
 
 export const MainPage = () => {
     const [weekDates, setWeekDates] = useState<string[]>([]);
+    const calendarData = mocks;
     const changeWeek = (direction:string) => {
         let newWeekDates: string[] = [];
         if (direction === "next") {
@@ -26,7 +28,7 @@ export const MainPage = () => {
     return (
         <div>
             <Header changeWeekDates = {changeWeek}/>
-            <Calendar weekDays={weekDates} />
+            <Calendar weekDays={weekDates} data={calendarData} />
         </div>
     );
 }
