@@ -1,8 +1,8 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { StaticDateTimePicker } from "@mui/x-date-pickers";
-import { on } from "events";
 import { ICalendarEntry } from "../types";
 import { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
 export type EventModalProps = {
     open: boolean;
     handleClose: () => void,
@@ -14,7 +14,7 @@ export const EventModal = (props : EventModalProps) => {
     const [description, setDescription] = useState(props.calendarEntry?.description || "");
     const [type, setType] = useState(props.calendarEntry?.type || 1);
     const [location, setLocation] = useState(props.calendarEntry?.location || "");
-    const [start, setStart] = useState(props.calendarEntry?.start || new Date());
+    const [start, setStart] = useState<Dayjs | null>(dayjs(props.calendarEntry?.start) || dayjs());
     return (
         <Dialog open={props.open} onClose={props.handleClose}>
             <DialogTitle>
@@ -35,7 +35,7 @@ export const EventModal = (props : EventModalProps) => {
                     </FormControl>
                     <TextField label="Description" variant="standard" value={description} onChange={e => setDescription(e.target.value)}/>
                     <TextField label="Location" variant="standard" value={location} onChange={e => setLocation(e.target.value)}/>
-                    <StaticDateTimePicker views={["day","hours"]} slotProps={{toolbar: {hidden: true}, actionBar: () => ({actions: []})}}></StaticDateTimePicker>
+                    <StaticDateTimePicker views={["day","hours"]} defaultValue={start} onChange={value => setStart(value)} slotProps={{toolbar: {hidden: true}, actionBar: () => ({actions: []})}}></StaticDateTimePicker>
                 </Box>
             </DialogContent>
             <DialogActions>
