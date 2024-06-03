@@ -4,10 +4,10 @@ import { Slot } from "./Slot";
 import { getDayHour } from "../utils";
 type CalendarProps = {
     weekDates: string[];
-    data: ICalendarEntry[] | undefined;
+    calendarEntries: ICalendarEntry[] | undefined;
 }
 export const Calendar = (props: CalendarProps) => {
-    const {data, weekDates} = props;
+    const {calendarEntries, weekDates} = props;
     const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const hoursDay = ["08", "10", "12", "14", "16", "18", "20", "22", "24"];
     return (
@@ -26,13 +26,13 @@ export const Calendar = (props: CalendarProps) => {
                                 <TableCell key={`${hour}-${day}-${weekDates[index]}`}>
                                     {(() => {
                                         let slotAdded = false;
-                                        const slots = data?.map((item) => {
-                                            const itemDate = getDayHour(item.start.toISOString());
-                                            console.log("itemDate", itemDate);
-                                            if (itemDate.day === weekDates[index] && itemDate.hour === parseInt(hour)) {
+                                        const slots = calendarEntries?.map((entry) => {
+                                            const entryDate = getDayHour(entry.start.toISOString());
+                                            console.log("entryDate", entryDate);
+                                            if (entryDate.day === weekDates[index] && entryDate.hour === parseInt(hour)) {
                                                 slotAdded = true;
-                                                console.log("item", item);
-                                                return (<Slot key={item.id} details={item} />);
+                                                console.log("entry", entry);
+                                                return (<Slot key={entry.id} calendarEntry={entry} />);
                                             }
                                             else return null;
                                         });

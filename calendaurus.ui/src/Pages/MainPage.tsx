@@ -28,7 +28,7 @@ export const MainPage = () => {
     return (
         <div>
             <Header changeWeekDates = {changeWeek}/>
-            <Calendar weekDates={weekDates} data={calendarData} />
+            <Calendar weekDates={weekDates} calendarEntries={calendarData} />
         </div>
     );
 }

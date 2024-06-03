@@ -10,8 +10,8 @@ export type HeaderProps = {
 }
 
 export const Header = (props : HeaderProps) => {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const navigator = useNavigate();
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [openModal, setOpenModal] = React.useState(false);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -21,7 +21,6 @@ export const Header = (props : HeaderProps) => {
         setAnchorEl(null);
         if(event.currentTarget.innerText === "Logout"){
             navigator("/");
-            
         }
     };
     const handleOpenModal = () => {
