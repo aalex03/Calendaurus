@@ -10,22 +10,6 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
     const { details } = props;
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
-    const handleType = (type: number | string) => {
-        switch (type) {
-            case 1:
-                return "Course";
-            case 2:
-                return "Laboratory";
-            case 3:
-                return "Seminar";
-            case 4:
-                return "Project";
-            case 5:
-                return "Exam";
-            default:
-                return "Unknown";
-        }
-    }
     const handleCloseMenu = (event: React.MouseEvent<HTMLElement>) => {
         if (event.currentTarget.textContent === "Edit") {
             console.log("Edit");
@@ -36,7 +20,6 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
         setAnchorEl(null);
     }
     const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
-        console.log(event.currentTarget);
         setAnchorEl(event.currentTarget);
     }
     return (

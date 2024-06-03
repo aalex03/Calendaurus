@@ -1,23 +1,15 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
-import { EmptySlotButton } from "./EmptySlotButton";
-import { PopulatedSlotButton } from "./PopulatedSlotButton";
 import { ICalendarEntry } from "../types";
 import { Slot } from "./Slot";
 import { getDayHour } from "../utils";
 type CalendarProps = {
-    weekDays: string[];
+    weekDates: string[];
     data: ICalendarEntry[] | undefined;
 }
 export const Calendar = (props: CalendarProps) => {
-    const data = props.data;
+    const {data, weekDates} = props;
     const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    const weekDates = props.weekDays;
     const hoursDay = ["08", "10", "12", "14", "16", "18", "20", "22", "24"];
-    console.log(data);
-    console.log(weekDates);
-    function getRandomInt(max: number) {
-        return Math.floor(Math.random() * max);
-    }
     return (
         <TableContainer>
             <Table>

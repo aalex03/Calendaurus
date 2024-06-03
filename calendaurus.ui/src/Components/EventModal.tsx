@@ -21,7 +21,8 @@ export const EventModal = (props : EventModalProps) => {
                             <MenuItem value={1}>Course</MenuItem>
                             <MenuItem value={2}>Laboratory</MenuItem>
                             <MenuItem value={3}>Seminar</MenuItem>
-                            <MenuItem value={4}>Exam</MenuItem>
+                            <MenuItem value={4}>Project</MenuItem>
+                            <MenuItem value={5}>Exam</MenuItem>
                         </Select>
                     </FormControl>
                     <TextField label="Description" variant="standard"/>

@@ -19,9 +19,8 @@ export const Header = (props : HeaderProps) => {
     };
     const handleClose = (event: any) => {
         setAnchorEl(null);
-        console.log(event);
         if(event.currentTarget.innerText === "Logout"){
-            console.log("clicked logout");
+            navigator("/");
             
         }
     };
