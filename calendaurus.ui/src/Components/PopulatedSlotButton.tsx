@@ -2,6 +2,7 @@ import { Edit, MoreVert, Remove } from "@mui/icons-material"
 import { Box, Card, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from "@mui/material"
 import { ICalendarEntry } from "../types"
 import React from "react";
+import { EventModal } from "./EventModal";
 export type PopulatedSlotButtonProps = {
     details: ICalendarEntry;
 }
@@ -9,13 +10,17 @@ export type PopulatedSlotButtonProps = {
 export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
     const { details } = props;
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [openModal, setOpenModal] = React.useState(false);
     const openMenu = Boolean(anchorEl);
     const handleCloseMenu = (event: React.MouseEvent<HTMLElement>) => {
+        
         if (event.currentTarget.textContent === "Edit") {
             console.log("Edit");
+            setOpenModal(true);
         }
         if (event.currentTarget.textContent === "Delete") {
             console.log("Delete");
+            setOpenModal(true);
         }
         setAnchorEl(null);
     }
@@ -32,7 +37,8 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
                 <IconButton onClick={handleClickMenu}>
                     <MoreVert />
                 </IconButton>
-                <Menu open={openMenu} anchorEl={anchorEl}>
+                
+                <Menu open={openMenu} anchorEl={anchorEl} onClose={handleCloseMenu}>
                     <MenuItem onClick={handleCloseMenu}>
                         <ListItemIcon>
                             <Edit fontSize="small"></Edit>
