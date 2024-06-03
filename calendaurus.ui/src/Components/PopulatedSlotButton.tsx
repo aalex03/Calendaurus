@@ -5,6 +5,7 @@ import React from "react";
 import { EventModal } from "./EventModal";
 export type PopulatedSlotButtonProps = {
     calendarEntry: ICalendarEntry;
+    CalendarEntryChanged?: (updatedEntry: ICalendarEntry) => void;
 }
 
 export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
@@ -27,8 +28,24 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
     const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     }
+    const getBackgroundColor = (type: number) => {
+        switch (type) {
+            case 1:
+                return "#FFD700";
+            case 2:
+                return "#FFA500";
+            case 3:
+                return "#FF6347";
+            case 4:
+                return "#4682B4";
+            case 5:
+                return "#8A2BE2";
+            default:
+                return "#FFD700";
+        }
+    }
     return (
-        <Card sx={{ justifyContent: "space-around", display: "flex" }}>
+        <Card sx={{ justifyContent: "space-around", display: "flex", backgroundColor: getBackgroundColor(props.calendarEntry.type)}}>
             <Box>
                 <Typography variant="body2">{calendarEntry.title}</Typography>
                 <Typography variant="caption">{calendarEntry.description}</Typography>
@@ -45,7 +62,7 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
                         </ListItemIcon>
                         <ListItemText primary="Edit"></ListItemText>
                     </MenuItem>
-                    <EventModal calendarEntry = {calendarEntry} open={openEditModal} handleClose={() => { setOpenEditModal(false); setAnchorEl(null); }} />
+                    <EventModal calendarEntry = {calendarEntry} calendarEntryChanged={props.CalendarEntryChanged} open={openEditModal} handleClose={() => { setOpenEditModal(false); setAnchorEl(null); }} />
                     <MenuItem onClick={handleCloseMenu}>
                         <ListItemIcon>
                             <Remove fontSize="small"></Remove>

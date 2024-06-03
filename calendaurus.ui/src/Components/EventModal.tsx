@@ -7,6 +7,7 @@ export type EventModalProps = {
     open: boolean;
     handleClose: () => void,
     calendarEntry? : ICalendarEntry
+    calendarEntryChanged?: (updatedEntry: ICalendarEntry) => void;
 }
 
 export const EventModal = (props : EventModalProps) => {
@@ -15,6 +16,22 @@ export const EventModal = (props : EventModalProps) => {
     const [type, setType] = useState(props.calendarEntry?.type || 1);
     const [location, setLocation] = useState(props.calendarEntry?.location || "");
     const [start, setStart] = useState<Dayjs | null>(dayjs(props.calendarEntry?.start) || dayjs());
+    const onSubmit = () => {
+        
+            const updatedEntry : ICalendarEntry= {
+                id: props.calendarEntry?.id || Math.random().toString(36).substring(7),
+                title: title,
+                description: description,
+                type: type,
+                location: location,
+                start: start?.toDate() || new Date(),
+                created: new Date(),
+                updated: new Date()
+            }
+            props.calendarEntryChanged!(updatedEntry);
+        
+        props.handleClose();
+    }
     return (
         <Dialog open={props.open} onClose={props.handleClose}>
             <DialogTitle>
@@ -35,12 +52,12 @@ export const EventModal = (props : EventModalProps) => {
                     </FormControl>
                     <TextField label="Description" variant="standard" value={description} onChange={e => setDescription(e.target.value)}/>
                     <TextField label="Location" variant="standard" value={location} onChange={e => setLocation(e.target.value)}/>
-                    <StaticDateTimePicker views={["day","hours"]} defaultValue={start} onChange={value => setStart(value)} slotProps={{toolbar: {hidden: true}, actionBar: () => ({actions: []})}}></StaticDateTimePicker>
+                    <StaticDateTimePicker ampm={false} views={["day","hours"]} defaultValue={start} onChange={value => setStart(value)} slotProps={{toolbar: {hidden: true}, actionBar: () => ({actions: []})}}></StaticDateTimePicker>
                 </Box>
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" color="error" onClick={props.handleClose}>Cancel</Button>
-                <Button variant="contained" color="success">Submit</Button>
+                <Button variant="contained" color="success" onClick={onSubmit}>Submit</Button>
             </DialogActions>
         </Dialog>
     )

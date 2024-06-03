@@ -5,6 +5,7 @@ import { getDayHour } from "../utils";
 type CalendarProps = {
     weekDates: string[];
     calendarEntries: ICalendarEntry[] | undefined;
+    calendarEntryChanged?: (updatedEntry: ICalendarEntry) => void;
 }
 export const Calendar = (props: CalendarProps) => {
     const {calendarEntries, weekDates} = props;
@@ -32,12 +33,12 @@ export const Calendar = (props: CalendarProps) => {
                                             if (entryDate.day === weekDates[index] && entryDate.hour === parseInt(hour)) {
                                                 slotAdded = true;
                                                 console.log("entry", entry);
-                                                return (<Slot key={entry.id} calendarEntry={entry} />);
+                                                return (<Slot key={entry.id} calendarEntry={entry} CalendarEntryChanged={props.calendarEntryChanged}/>);
                                             }
                                             else return null;
                                         });
                                         if (!slotAdded) {
-                                            slots?.push(<Slot key={`${hour}-${day}-${weekDates[index]}`} />);
+                                            slots?.push(<Slot key={`${hour}-${day}-${weekDates[index]}`}/>);
                                         }
                                         console.log("slots", slots);
                                         return slots;

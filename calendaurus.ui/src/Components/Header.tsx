@@ -4,9 +4,11 @@ import React from "react";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useNavigate } from "react-router-dom";
 import { EventModal } from "./EventModal";
+import { ICalendarEntry } from "../types";
 
 export type HeaderProps = {
     changeWeekDates: (direction: string) => void;
+    calendarEntryChanged: (updatedEntry: ICalendarEntry) => void;
 }
 
 export const Header = (props : HeaderProps) => {
@@ -44,7 +46,7 @@ export const Header = (props : HeaderProps) => {
                 <Box sx={{ display: "flex", gap: 1 }}>
                     <Button variant="outlined" onClick={() => props.changeWeekDates("today")}>Today</Button>
                     <Button variant="contained" onClick={handleOpenModal}>New event</Button>
-                    <EventModal open={openModal} handleClose={handleCloseModal}/>
+                    <EventModal open={openModal} handleClose={handleCloseModal} calendarEntryChanged={props.calendarEntryChanged}/>
                     <div>
                         <IconButton
                             aria-label="more"

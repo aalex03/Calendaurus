@@ -1,10 +1,11 @@
 import { Add } from "@mui/icons-material"
 import { Card, IconButton } from "@mui/material"
 import { EventModal } from "./EventModal"
+import dayjs from "dayjs"
 type EmptySlotButtonProps = {
     openModal:boolean,
     onClose: () => void,
-    handleOpenModal: () => void
+    handleOpenModal: () => void,
 }
 export const EmptySlotButton = (props : EmptySlotButtonProps) => {
     const {openModal, onClose, handleOpenModal} = props;
