@@ -29,16 +29,14 @@ export const Calendar = (props: CalendarProps) => {
                                         let slotAdded = false;
                                         const slots = calendarEntries?.map((entry) => {
                                             const entryDate = getDayHour(entry.start.toISOString());
-                                            console.log("entryDate", entryDate);
                                             if (entryDate.day === weekDates[index] && entryDate.hour === parseInt(hour)) {
                                                 slotAdded = true;
-                                                console.log("entry", entry);
-                                                return (<Slot key={entry.id} calendarEntry={entry} CalendarEntryChanged={props.calendarEntryChanged}/>);
+                                                return (<Slot key={entry.id} calendarEntry={entry} CalendarEntryChanged={props.calendarEntryChanged} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);
                                             }
                                             else return null;
                                         });
                                         if (!slotAdded) {
-                                            slots?.push(<Slot key={`${hour}-${day}-${weekDates[index]}`}/>);
+                                            slots?.push(<Slot key={`${hour}-${day}-${weekDates[index]}`} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);
                                         }
                                         console.log("slots", slots);
                                         return slots;

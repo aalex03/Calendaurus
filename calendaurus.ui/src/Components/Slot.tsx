@@ -4,8 +4,10 @@ import { EmptySlotButton } from "./EmptySlotButton";
 import { PopulatedSlotButton } from "./PopulatedSlotButton";
 
 type SlotProps = {
-    calendarEntry? : ICalendarEntry
+    calendarEntry? : ICalendarEntry,
     CalendarEntryChanged?: (updatedEntry: ICalendarEntry) => void,
+    weekDate : string,
+    hour : number
 }
 export const Slot = (props: SlotProps) => {
     const [open, setOpen] = React.useState(false);
