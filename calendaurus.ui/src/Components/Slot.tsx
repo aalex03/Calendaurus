@@ -12,7 +12,7 @@ type SlotProps = {
 export const Slot = (props: SlotProps) => {
     const [open, setOpen] = React.useState(false);
     const {calendarEntry} = props;
-    return calendarEntry ? <PopulatedSlotButton calendarEntry={calendarEntry} CalendarEntryChanged={props.CalendarEntryChanged!}/> : <EmptySlotButton openModal={open} onClose={function (): void {
+    return calendarEntry ? <PopulatedSlotButton calendarEntry={calendarEntry} CalendarEntryChanged={props.CalendarEntryChanged!}/> : <EmptySlotButton calendarEntryChanged = {props.CalendarEntryChanged} weekdate= {props.weekDate} hour = {props.hour} openModal={open} onClose={function (): void {
         setOpen(false);
     } } handleOpenModal={function (): void {
         setOpen(true);

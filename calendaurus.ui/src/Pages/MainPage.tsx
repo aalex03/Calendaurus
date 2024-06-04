@@ -28,6 +28,7 @@ export const MainPage = () => {
     }, []);
 
     const handleCalendarEntryChange = (updatedEntry: ICalendarEntry) => {
+        console.log("updatedEntry", updatedEntry)
         let added = false;
         const updatedCalendarEntries = calendarData.map((entry) => {
             if (entry.id === updatedEntry.id) {

@@ -36,7 +36,7 @@ export const Calendar = (props: CalendarProps) => {
                                             else return null;
                                         });
                                         if (!slotAdded) {
-                                            slots?.push(<Slot key={`${hour}-${day}-${weekDates[index]}`} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);
+                                            slots?.push(<Slot key={`${hour}-${day}-${weekDates[index]}`} weekDate={weekDates[index]} hour={Number.parseInt(hour)} CalendarEntryChanged={props.calendarEntryChanged}/>);
                                         }
                                         console.log("slots", slots);
                                         return slots;
