@@ -55,6 +55,11 @@ builder.Services
         options.TokenValidationParameters.NameClaimType = "preferred_username";
     },
     options => builder.Configuration.Bind("AzureAd", options));
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(builder => {
+        builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,7 +75,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-
+app.UseCors();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
