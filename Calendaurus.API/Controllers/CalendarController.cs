@@ -34,17 +34,17 @@ public class CalendarController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CalendarEntry entry)
+    public async Task<IActionResult> Create([FromBody] CalendarEntryDto entryDto)
     {
         var currentUser = User.Identity!.Name!;
         var user = await _userRepository.GetByEmailAsync(currentUser);
-        return user is null ? BadRequest() : Ok(await _calendarService.CreateAsync(entry,user.Id));
+        return user is null ? BadRequest() : Ok(await _calendarService.CreateAsync(entryDto,user.Id));
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CalendarEntry entry)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CalendarEntryDto entryDto)
     {
-        var result = await _calendarService.UpdateAsync(entry);
+        var result = await _calendarService.UpdateAsync(id, entryDto);
         return result is null ? BadRequest() : Ok(result);
     }
 
