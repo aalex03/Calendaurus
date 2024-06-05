@@ -1,10 +1,10 @@
 export interface ICalendarEntry {
     id: string,
     title: string,
-    description: string,
+    description?: string,
     start: Date,
-    created: Date,
-    updated: Date,
-    type: int,
-    location: string,
+    created?: Date,
+    updated?: Date,
+    type?: int,
+    location?: string,
 }
