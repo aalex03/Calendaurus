@@ -4,8 +4,7 @@ import { Slot } from "./Slot";
 import { getDayHour } from "../utils";
 type CalendarProps = {
     weekDates: string[];
-    calendarEntries: ICalendarEntry[] | undefined;
-    calendarEntryChanged?: (updatedEntry: ICalendarEntry) => void;
+    calendarEntries?: ICalendarEntry[];
 }
 export const Calendar = (props: CalendarProps) => {
     const {calendarEntries, weekDates} = props;
@@ -31,14 +30,13 @@ export const Calendar = (props: CalendarProps) => {
                                             const entryDate = getDayHour(entry.start.toISOString());
                                             if (entryDate.day === weekDates[index] && entryDate.hour === parseInt(hour)) {
                                                 slotAdded = true;
-                                                return (<Slot key={entry.id} calendarEntry={entry} CalendarEntryChanged={props.calendarEntryChanged} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);
+                                                return (<Slot key={entry.id} calendarEntry={entry} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);
                                             }
                                             else return null;
                                         });
                                         if (!slotAdded) {
-                                            slots?.push(<Slot key={`${hour}-${day}-${weekDates[index]}`} weekDate={weekDates[index]} hour={Number.parseInt(hour)} CalendarEntryChanged={props.calendarEntryChanged}/>);
+                                            slots?.push(<Slot key={`${hour}-${day}-${weekDates[index]}`} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);
                                         }
-                                        console.log("slots", slots);
                                         return slots;
                                     })()}
                                 </TableCell>

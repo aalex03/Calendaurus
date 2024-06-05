@@ -9,7 +9,6 @@ type EmptySlotButtonProps = {
     handleOpenModal: () => void,
     weekdate?: string,
     hour?: number
-    calendarEntryChanged?: (updatedEntry: ICalendarEntry) => void
 }
 export const EmptySlotButton = (props : EmptySlotButtonProps) => {
     const {openModal, onClose, handleOpenModal} = props;
@@ -18,7 +17,7 @@ export const EmptySlotButton = (props : EmptySlotButtonProps) => {
             <IconButton onClick={handleOpenModal}>
                 <Add></Add>
             </IconButton>
-            <EventModal calendarEntryChanged = {props.calendarEntryChanged} open={openModal} handleClose={onClose} weekdate={props.weekdate} hour={props.hour}/>
+            <EventModal open={openModal} handleClose={onClose} weekdate={props.weekdate} hour={props.hour}/>
         </Card>
     )
 }
