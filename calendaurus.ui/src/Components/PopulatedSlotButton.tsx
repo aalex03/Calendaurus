@@ -5,7 +5,6 @@ import React from "react";
 import { EventModal } from "./EventModal";
 export type PopulatedSlotButtonProps = {
     calendarEntry: ICalendarEntry;
-    CalendarEntryChanged?: (updatedEntry: ICalendarEntry) => void;
 }
 
 export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
@@ -62,7 +61,7 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
                         </ListItemIcon>
                         <ListItemText primary="Edit"></ListItemText>
                     </MenuItem>
-                    <EventModal calendarEntry = {calendarEntry} calendarEntryChanged={props.CalendarEntryChanged} open={openEditModal} handleClose={() => { setOpenEditModal(false); setAnchorEl(null); }} />
+                    <EventModal calendarEntry = {calendarEntry} open={openEditModal} handleClose={() => { setOpenEditModal(false); setAnchorEl(null); }} />
                     <MenuItem onClick={handleCloseMenu}>
                         <ListItemIcon>
                             <Remove fontSize="small"></Remove>

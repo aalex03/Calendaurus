@@ -3,22 +3,54 @@ import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import { ICalendarEntry } from "../types";
 import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import { useMutation } from "react-query";
+import { postCalendarEntryMutation } from "../Api/postCalendarEntry";
+import { useMsal } from "@azure/msal-react";
 export type EventModalProps = {
     open: boolean;
     handleClose: () => void,
     calendarEntry?: ICalendarEntry
-    calendarEntryChanged?: (updatedEntry: ICalendarEntry) => void;
+    refetechAllEntries?: () => void,
     weekdate?: string,
     hour?: number
 }
 
 export const EventModal = (props: EventModalProps) => {
-
+    const {instance} = useMsal();
     const [title, setTitle] = useState(props.calendarEntry?.title || "");
     const [description, setDescription] = useState(props.calendarEntry?.description || "");
     const [type, setType] = useState(props.calendarEntry?.type || 1);
     const [location, setLocation] = useState(props.calendarEntry?.location || "");
     const [start, setStart] = useState<Dayjs | null>(dayjs());
+    const {data, mutate: onPost} = useMutation({
+        mutationFn: (entry : ICalendarEntry) => postCalendarEntryMutation(instance,entry)
+    })
+    const handleTimeChange = (value: Dayjs | null) => {
+        if(value){
+            const newDate = dayjs(value).minute(0).second(0).millisecond(0);
+            setStart(newDate);
+        }
+    }
+    const handleSubmit = () => {
+        const newEntry : ICalendarEntry = {
+            title,
+            description,
+            type,
+            location,
+            start: start!.toDate(),
+            id: "",
+            created: dayjs().toDate(),
+            updated: dayjs().toDate()
+        }
+        onPost(newEntry, {
+            onSuccess: () => {
+                if(props.refetechAllEntries){
+                    props.refetechAllEntries();
+                }
+                props.handleClose();
+            }
+        })
+    }
     useEffect(() => {
         if (props.calendarEntry) {
             setStart(dayjs(props.calendarEntry.start));
@@ -27,22 +59,6 @@ export const EventModal = (props: EventModalProps) => {
             setStart(dayjs(props.weekdate, "Do MMMM").hour(props.hour));
         }
     }, [props.calendarEntry, props.weekdate, props.hour]);
-    const onSubmit = () => { 
-            const updatedEntry: ICalendarEntry = {
-                id: props.calendarEntry?.id || Math.random().toString(36).substring(7),
-                title: title,
-                description: description,
-                type: type,
-                location: location,
-                start: start?.toDate() || new Date(),
-                created: new Date(),
-                updated: new Date()
-            }
-            props.calendarEntryChanged!(updatedEntry);
-        
-
-        props.handleClose();
-    }
     return (
         <Dialog open={props.open} onClose={props.handleClose}>
             <DialogTitle>
@@ -63,12 +79,12 @@ export const EventModal = (props: EventModalProps) => {
                     </FormControl>
                     <TextField label="Description" variant="standard" value={description} onChange={e => setDescription(e.target.value)} />
                     <TextField label="Location" variant="standard" value={location} onChange={e => setLocation(e.target.value)} />
-                    <StaticDateTimePicker ampm={false} views={["day", "hours"]} defaultValue={start} onChange={value => setStart(value)} slotProps={{ toolbar: { hidden: true }, actionBar: () => ({ actions: [] }) }}></StaticDateTimePicker>
+                    <StaticDateTimePicker ampm={false} views={["day", "hours"]} defaultValue={start} onChange={handleTimeChange} slotProps={{ toolbar: { hidden: true }, actionBar: () => ({ actions: [] }) }}></StaticDateTimePicker>
                 </Box>
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" color="error" onClick={props.handleClose}>Cancel</Button>
-                <Button variant="contained" color="success" onClick={onSubmit}>Submit</Button>
+                <Button variant="contained" color="success" onClick={handleSubmit}>Submit</Button>
             </DialogActions>
         </Dialog>
     )

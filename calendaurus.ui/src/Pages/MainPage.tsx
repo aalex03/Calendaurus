@@ -4,10 +4,14 @@ import { Header } from "../Components/Header";
 import dayjs from "dayjs";
 import { mocks } from "../mocks";
 import { ICalendarEntry } from "../types";
-
-export const MainPage = () => {
+import { useCalendarQuery } from "../Api/getCalendarData";
+import { IPublicClientApplication, PublicClientApplication } from "@azure/msal-browser";
+export type MainPageProps = {
+    instance : IPublicClientApplication
+}
+export const MainPage = (props : MainPageProps) => {
     const [weekDates, setWeekDates] = useState<string[]>([]);
-    const [calendarData, setCalendarEntries] = useState(mocks);
+    const calendarData = (useCalendarQuery(props.instance)).data || mocks as ICalendarEntry[];
     const changeWeek = (direction: string) => {
         let newWeekDates: string[] = [];
         if (direction === "next") {
@@ -27,25 +31,10 @@ export const MainPage = () => {
         setWeekDates(dateOfWeek);
     }, []);
 
-    const handleCalendarEntryChange = (updatedEntry: ICalendarEntry) => {
-        console.log("updatedEntry", updatedEntry)
-        let added = false;
-        const updatedCalendarEntries = calendarData.map((entry) => {
-            if (entry.id === updatedEntry.id) {
-                added = true;
-                return updatedEntry;
-            }
-            else return entry;
-        });
-        if (!added) {
-            updatedCalendarEntries.push(updatedEntry);
-        }
-        setCalendarEntries(updatedCalendarEntries);
-    };
     return (
         <div>
-            <Header changeWeekDates={changeWeek} calendarEntryChanged={handleCalendarEntryChange}/>
-            <Calendar weekDates={weekDates} calendarEntries={calendarData} calendarEntryChanged={handleCalendarEntryChange} />
+            <Header changeWeekDates={changeWeek}/>
+            <Calendar weekDates={weekDates} calendarEntries={calendarData}/>
         </div>
     );
 }
