@@ -17,23 +17,32 @@ import { BrowserRouter, BrowserRouter as Router } from "react-router-dom";
 // Import LocalizationProvider and AdapterDayjs for date and time localization
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { MsalProvider } from "@azure/msal-react";
+import { msalConfig } from "./Api/authConfig";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 // Create a root for ReactDOM to render the application
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
 );
-
+const msalInstance = new PublicClientApplication(msalConfig)
+export const queryClient = new QueryClient();
 // Render the application inside React.StrictMode to enable additional checks and warnings
 root.render(
 	<React.StrictMode>
 		{/* Wrap the application with Router for enabling routing */}
-		<BrowserRouter>
-			{/* Provide localization capabilities to the application */}
-			<LocalizationProvider dateAdapter={AdapterDayjs}>
-				{/* Render the main App component */}
-				<App />
-			</LocalizationProvider>
-		</BrowserRouter>
+		<QueryClientProvider client={queryClient}>
+		<MsalProvider instance={msalInstance}>
+			<BrowserRouter>
+				{/* Provide localization capabilities to the application */}
+				<LocalizationProvider dateAdapter={AdapterDayjs}>
+					{/* Render the main App component */}
+					<App />
+				</LocalizationProvider>
+			</BrowserRouter>
+		</MsalProvider>
+		</QueryClientProvider>
 	</React.StrictMode>
 );
 
