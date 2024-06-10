@@ -70,11 +70,11 @@ export const EventModal = (props: EventModalProps) => {
                     <FormControl>
                         <InputLabel>Type</InputLabel>
                         <Select label="Type" value={type} onChange={e => setType(e.target.value)}>
-                            <MenuItem value={1}>Course</MenuItem>
-                            <MenuItem value={2}>Laboratory</MenuItem>
-                            <MenuItem value={3}>Seminar</MenuItem>
-                            <MenuItem value={4}>Project</MenuItem>
-                            <MenuItem value={5}>Exam</MenuItem>
+                            <MenuItem value={0}>Course</MenuItem>
+                            <MenuItem value={1}>Laboratory</MenuItem>
+                            <MenuItem value={2}>Seminar</MenuItem>
+                            <MenuItem value={3}>Project</MenuItem>
+                            <MenuItem value={4}>Exam</MenuItem>
                         </Select>
                     </FormControl>
                     <TextField label="Description" variant="standard" value={description} onChange={e => setDescription(e.target.value)} />

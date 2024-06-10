@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { IPublicClientApplication } from "@azure/msal-browser";
 
 export async function getEntries(instance: IPublicClientApplication) {
-    const url = "https://localhost:7165/api/Calendar";
+    const url = "http://localhost:5234/api/Calendar";
     const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -13,7 +13,8 @@ export async function getEntries(instance: IPublicClientApplication) {
             Authorization: `Bearer ${await prepareToken(instance)}`
         }
     });
-    return await response.json() as ICalendarEntry[];
+    const responseData = await response.json() as ICalendarEntry[];
+    return responseData;
 }
 
 export function useCalendarQuery(instance : IPublicClientApplication) {

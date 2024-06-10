@@ -11,7 +11,7 @@ export type MainPageProps = {
 }
 export const MainPage = (props : MainPageProps) => {
     const [weekDates, setWeekDates] = useState<string[]>([]);
-    const calendarData = (useCalendarQuery(props.instance)).data || mocks as ICalendarEntry[];
+    const {data: calendarData, isLoading, isError} = useCalendarQuery(props.instance);
     const changeWeek = (direction: string) => {
         let newWeekDates: string[] = [];
         if (direction === "next") {
@@ -31,6 +31,13 @@ export const MainPage = (props : MainPageProps) => {
         setWeekDates(dateOfWeek);
     }, []);
 
+    if (isLoading) {
+        return <div>Loading...</div>
+    }
+
+    if (isError) {
+        return <div>Error...</div>
+    }
     return (
         <div>
             <Header changeWeekDates={changeWeek}/>
