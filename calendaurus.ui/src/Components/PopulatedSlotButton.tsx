@@ -61,7 +61,7 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
                         </ListItemIcon>
                         <ListItemText primary="Edit"></ListItemText>
                     </MenuItem>
-                    <EventModal calendarEntry = {calendarEntry} open={openEditModal} handleClose={() => { setOpenEditModal(false); setAnchorEl(null); }} />
+                    <EventModal edit={true} calendarEntry = {calendarEntry} open={openEditModal} handleClose={() => { setOpenEditModal(false); setAnchorEl(null); }} />
                     <MenuItem onClick={handleCloseMenu}>
                         <ListItemIcon>
                             <Remove fontSize="small"></Remove>

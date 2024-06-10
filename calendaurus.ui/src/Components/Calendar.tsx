@@ -27,7 +27,7 @@ export const Calendar = (props: CalendarProps) => {
                                     {(() => {
                                         let slotAdded = false;
                                         const slots = calendarEntries?.map((entry) => {
-                                            const entryDate = getDayHour(entry.start.toISOString());
+                                            const entryDate = getDayHour(entry.start);
                                             if (entryDate.day === weekDates[index] && entryDate.hour === parseInt(hour)) {
                                                 slotAdded = true;
                                                 return (<Slot key={entry.id} calendarEntry={entry} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);

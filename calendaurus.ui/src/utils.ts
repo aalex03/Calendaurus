@@ -1,11 +1,10 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 dayjs.extend(timezone);
-export const getDayHour = (isoString: string) => {
-    const localDate = dayjs(isoString).tz("Europe/Istanbul");
-    const day = localDate.format("Do MMMM");
-    const hour = localDate.hour();
+export const getDayHour = (date: Dayjs) => {
+    const day = date.format("Do MMMM");
+    const hour = date.hour();
     return { day, hour };
 } 

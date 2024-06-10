@@ -3,9 +3,10 @@ import { prepareToken } from "./authUtils";
 import { ICalendarEntry } from "../types";
 import { useQuery } from "react-query";
 import { IPublicClientApplication } from "@azure/msal-browser";
+import dayjs from "dayjs";
 
 export async function getEntries(instance: IPublicClientApplication) {
-    const url = "http://localhost:5234/api/Calendar";
+    const url = "https://localhost:7165/api/Calendar";
     const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -14,7 +15,16 @@ export async function getEntries(instance: IPublicClientApplication) {
         }
     });
     const responseData = await response.json() as ICalendarEntry[];
-    return responseData;
+    const entries = responseData.map((entry) => {
+        return {
+            ...entry,
+            start:  dayjs(entry.start),
+            created: dayjs(entry.created),
+            updated: dayjs(entry.updated)
+        }
+    });
+    console.log(entries);
+    return entries;
 }
 
 export function useCalendarQuery(instance : IPublicClientApplication) {

@@ -6,13 +6,15 @@ import dayjs, { Dayjs } from "dayjs";
 import { useMutation } from "react-query";
 import { postCalendarEntryMutation } from "../Api/postCalendarEntry";
 import { useMsal } from "@azure/msal-react";
+import { putCalendarEntryMutation } from "../Api/putCalendarEntry";
 export type EventModalProps = {
-    open: boolean;
+    open: boolean,
     handleClose: () => void,
     calendarEntry?: ICalendarEntry
     refetechAllEntries?: () => void,
     weekdate?: string,
-    hour?: number
+    hour?: number,
+    edit? : boolean
 }
 
 export const EventModal = (props: EventModalProps) => {
@@ -23,7 +25,7 @@ export const EventModal = (props: EventModalProps) => {
     const [location, setLocation] = useState(props.calendarEntry?.location || "");
     const [start, setStart] = useState<Dayjs | null>(dayjs());
     const {data, mutate: onPost} = useMutation({
-        mutationFn: (entry : ICalendarEntry) => postCalendarEntryMutation(instance,entry)
+        mutationFn: (entry : ICalendarEntry) => props.edit ? putCalendarEntryMutation(instance, entry) : postCalendarEntryMutation(instance, entry)
     })
     const handleTimeChange = (value: Dayjs | null) => {
         if(value){
@@ -37,10 +39,10 @@ export const EventModal = (props: EventModalProps) => {
             description,
             type,
             location,
-            start: start!.toDate(),
-            id: "",
-            created: dayjs().toDate(),
-            updated: dayjs().toDate()
+            start: start!,
+            id: props.calendarEntry?.id ?? "",
+            created: dayjs(),
+            updated: dayjs()
         }
         onPost(newEntry, {
             onSuccess: () => {
