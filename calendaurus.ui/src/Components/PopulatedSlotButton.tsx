@@ -3,12 +3,15 @@ import { Box, Card, Dialog, IconButton, ListItemIcon, ListItemText, Menu, MenuIt
 import { ICalendarEntry } from "../types"
 import React from "react";
 import { EventModal } from "./EventModal";
+import { deleteCalendarEntry } from "../Api/deleteCalendarEntry";
+import { useMsal } from "@azure/msal-react";
 export type PopulatedSlotButtonProps = {
     calendarEntry: ICalendarEntry;
     refetchEntries?: () => void;
 }
 
 export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
+    const {instance} = useMsal();
     const { calendarEntry } = props;
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [openEditModal, setOpenEditModal] = React.useState(false);
@@ -27,6 +30,10 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
     }
     const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
+    }
+    const handleDelete = async () => {
+        await deleteCalendarEntry(instance, calendarEntry);
+        props.refetchEntries && props.refetchEntries();
     }
     const getBackgroundColor = (type: number) => {
         switch (type) {
@@ -73,7 +80,7 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
                         <Typography sx={{padding: "1rem"}}>Are you sure you want to delete this event?</Typography>
                         <Box sx={{ display: "flex", justifyContent: "space-around", padding: "1rem" }}>
                             <IconButton onClick={() => { setOpenDeleteModal(false); setAnchorEl(null); }}>No</IconButton>
-                            <IconButton onClick={() => { setOpenDeleteModal(false); setAnchorEl(null); }}>Yes</IconButton>
+                            <IconButton onClick={handleDelete}>Yes</IconButton>
                         </Box>
                     </Dialog>
                 </Menu>
