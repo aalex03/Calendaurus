@@ -4,7 +4,7 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 export const getDayHour = (isoString: string) => {
-    const localDate = dayjs(isoString).tz(dayjs.tz.guess());
+    const localDate = dayjs(isoString).tz("Europe/Istanbul");
     const day = localDate.format("Do MMMM");
     const hour = localDate.hour();
     return { day, hour };
