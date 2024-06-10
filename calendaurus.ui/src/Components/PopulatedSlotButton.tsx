@@ -5,6 +5,7 @@ import React from "react";
 import { EventModal } from "./EventModal";
 export type PopulatedSlotButtonProps = {
     calendarEntry: ICalendarEntry;
+    refetchEntries?: () => void;
 }
 
 export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
@@ -61,7 +62,7 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
                         </ListItemIcon>
                         <ListItemText primary="Edit"></ListItemText>
                     </MenuItem>
-                    <EventModal edit={true} calendarEntry = {calendarEntry} open={openEditModal} handleClose={() => { setOpenEditModal(false); setAnchorEl(null); }} />
+                    <EventModal refetechEntries={props.refetchEntries} edit={true} calendarEntry = {calendarEntry} open={openEditModal} handleClose={() => { setOpenEditModal(false); setAnchorEl(null); }} />
                     <MenuItem onClick={handleCloseMenu}>
                         <ListItemIcon>
                             <Remove fontSize="small"></Remove>

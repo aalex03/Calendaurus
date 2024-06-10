@@ -11,7 +11,7 @@ export type EventModalProps = {
     open: boolean,
     handleClose: () => void,
     calendarEntry?: ICalendarEntry
-    refetechAllEntries?: () => void,
+    refetechEntries?: () => void,
     weekdate?: string,
     hour?: number,
     edit? : boolean
@@ -46,9 +46,7 @@ export const EventModal = (props: EventModalProps) => {
         }
         onPost(newEntry, {
             onSuccess: () => {
-                if(props.refetechAllEntries){
-                    props.refetechAllEntries();
-                }
+                props.refetechEntries && props.refetechEntries();
                 props.handleClose();
             }
         })

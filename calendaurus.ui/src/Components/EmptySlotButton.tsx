@@ -9,6 +9,7 @@ type EmptySlotButtonProps = {
     handleOpenModal: () => void,
     weekdate?: string,
     hour?: number
+    refetchEntries?: () => void
 }
 export const EmptySlotButton = (props : EmptySlotButtonProps) => {
     const {openModal, onClose, handleOpenModal} = props;
@@ -17,7 +18,7 @@ export const EmptySlotButton = (props : EmptySlotButtonProps) => {
             <IconButton onClick={handleOpenModal}>
                 <Add></Add>
             </IconButton>
-            <EventModal open={openModal} handleClose={onClose} weekdate={props.weekdate} hour={props.hour}/>
+            <EventModal refetechEntries={props.refetchEntries} open={openModal} handleClose={onClose} weekdate={props.weekdate} hour={props.hour}/>
         </Card>
     )
 }

@@ -11,7 +11,7 @@ export type MainPageProps = {
 }
 export const MainPage = (props : MainPageProps) => {
     const [weekDates, setWeekDates] = useState<string[]>([]);
-    const {data: calendarData, isLoading, isError} = useCalendarQuery(props.instance);
+    const {data: calendarData, isLoading, isError, refetch} = useCalendarQuery(props.instance);
     const changeWeek = (direction: string) => {
         let newWeekDates: string[] = [];
         if (direction === "next") {
@@ -24,7 +24,6 @@ export const MainPage = (props : MainPageProps) => {
         }
         setWeekDates(newWeekDates);
     }
-
     useEffect(() => {
         const startOfWeek = dayjs().startOf("week").add(1, "day");
         const dateOfWeek = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, "day").format("Do MMMM"));
@@ -40,8 +39,8 @@ export const MainPage = (props : MainPageProps) => {
     }
     return (
         <div>
-            <Header changeWeekDates={changeWeek}/>
-            <Calendar weekDates={weekDates} calendarEntries={calendarData}/>
+            <Header refetchEntries = {refetch}changeWeekDates={changeWeek}/>
+            <Calendar refetchEntries = {refetch} weekDates={weekDates} calendarEntries={calendarData}/>
         </div>
     );
 }

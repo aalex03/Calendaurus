@@ -18,7 +18,7 @@ export async function getEntries(instance: IPublicClientApplication) {
     const entries = responseData.map((entry) => {
         return {
             ...entry,
-            start:  dayjs(entry.start),
+            start:  dayjs(entry.start).add(3, "hour"),
             created: dayjs(entry.created),
             updated: dayjs(entry.updated)
         }

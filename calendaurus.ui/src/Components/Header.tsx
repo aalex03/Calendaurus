@@ -9,7 +9,7 @@ import { useMsal } from "@azure/msal-react";
 
 export type HeaderProps = {
     changeWeekDates: (direction: string) => void,
-    refetchAllEntries?: () => void;
+    refetchEntries?: () => void;
 }
 
 export const Header = (props : HeaderProps) => {
@@ -59,7 +59,7 @@ export const Header = (props : HeaderProps) => {
                 <Box sx={{ display: "flex", gap: 1 }}>
                     <Button variant="outlined" onClick={() => props.changeWeekDates("today")}>Today</Button>
                     <Button variant="contained" onClick={handleOpenModal}>New event</Button>
-                    <EventModal open={openModal} handleClose={handleCloseModal}/>
+                    <EventModal refetechEntries={props.refetchEntries} open={openModal} handleClose={handleCloseModal}/>
                     <div>
                         <IconButton
                             aria-label="more"
