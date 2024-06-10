@@ -55,8 +55,10 @@ builder.Services
         options.TokenValidationParameters.NameClaimType = "preferred_username";
     },
     options => builder.Configuration.Bind("AzureAd", options));
-builder.Services.AddCors(options => {
-    options.AddDefaultPolicy(builder => {
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
         builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
     });
 });
@@ -66,7 +68,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(options => {
+    app.UseSwaggerUI(options =>
+    {
         options.OAuthAppName("Swagger Client");
         options.OAuthClientId(builder.Configuration.GetValue<string>("AzureAd:ClientId"));
         options.OAuthScopes("openid", "email", "api://be8fb141-1de4-47e6-b6eb-83b069827245/Calendaurus.API");
