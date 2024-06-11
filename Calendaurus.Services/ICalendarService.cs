@@ -7,5 +7,6 @@ public interface ICalendarService
     Task<CalendarEntry?> CreateAsync(CalendarEntryDto entryDto, Guid userId);
     Task<CalendarEntry?> UpdateAsync(Guid id, CalendarEntryDto entryDto);
     Task<bool> DeleteAsync(Guid id);
+    Task<string> ExportCalendar(Guid userId);
 }
 

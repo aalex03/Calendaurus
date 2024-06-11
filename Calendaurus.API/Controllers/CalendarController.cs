@@ -1,9 +1,12 @@
 namespace Calendaurus.API.Controllers;
 
+using System.Text;
 using Calendaurus.Models;
 using Calendaurus.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
@@ -53,5 +56,13 @@ public class CalendarController : ControllerBase
     {
         var result = await _calendarService.DeleteAsync(id);
         return result is false ? BadRequest() : Ok();
+    }
+    [HttpGet("{userId}/export")]
+    public async Task<IActionResult> GetExportedCalendar([FromRoute] Guid userId)
+    {
+        var calendar = await _calendarService.ExportCalendar(userId);
+        if(calendar.IsNullOrEmpty()) return BadRequest();
+        var content = Encoding.UTF8.GetBytes(calendar);
+        return File(content, "text/calendar", "calendar.ics");
     }
 }
