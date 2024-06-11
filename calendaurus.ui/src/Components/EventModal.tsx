@@ -14,27 +14,27 @@ export type EventModalProps = {
     refetechEntries?: () => void,
     weekdate?: string,
     hour?: number,
-    edit? : boolean
+    edit?: boolean
 }
 
 export const EventModal = (props: EventModalProps) => {
-    const {instance} = useMsal();
+    const { instance } = useMsal();
     const [title, setTitle] = useState(props.calendarEntry?.title || "");
     const [description, setDescription] = useState(props.calendarEntry?.description || "");
     const [type, setType] = useState(props.calendarEntry?.type || 1);
     const [location, setLocation] = useState(props.calendarEntry?.location || "");
     const [start, setStart] = useState<Dayjs | null>(dayjs());
-    const {data, mutate: onPost} = useMutation({
-        mutationFn: (entry : ICalendarEntry) => props.edit ? putCalendarEntryMutation(instance, entry) : postCalendarEntryMutation(instance, entry)
+    const { data, mutate: onPost } = useMutation({
+        mutationFn: (entry: ICalendarEntry) => props.edit ? putCalendarEntryMutation(instance, entry) : postCalendarEntryMutation(instance, entry)
     })
     const handleTimeChange = (value: Dayjs | null) => {
-        if(value){
+        if (value) {
             const newDate = dayjs(value).minute(0).second(0).millisecond(0);
             setStart(newDate);
         }
     }
     const handleSubmit = () => {
-        const newEntry : ICalendarEntry = {
+        const newEntry: ICalendarEntry = {
             title,
             description,
             type,
