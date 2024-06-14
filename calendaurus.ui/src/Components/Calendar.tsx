@@ -10,7 +10,7 @@ type CalendarProps = {
 export const Calendar = (props: CalendarProps) => {
     const {calendarEntries, weekDates} = props;
     const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    const hoursDay = ["08", "10", "12", "14", "16", "18", "20", "22", "24"];
+    const hoursDay = ["08", "10", "12", "14", "16", "18", "20", "22"];
     return (
         <TableContainer>
             <Table>

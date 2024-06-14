@@ -39,7 +39,7 @@ export const EventModal = (props: EventModalProps) => {
             description,
             type,
             location,
-            start: start!,
+            start: start!.add(3, "hour").utc(),
             id: props.calendarEntry?.id ?? "",
             created: dayjs(),
             updated: dayjs()
@@ -79,7 +79,7 @@ export const EventModal = (props: EventModalProps) => {
                     </FormControl>
                     <TextField label="Description" variant="standard" value={description} onChange={e => setDescription(e.target.value)} />
                     <TextField label="Location" variant="standard" value={location} onChange={e => setLocation(e.target.value)} />
-                    <StaticDateTimePicker ampm={false} views={["day", "hours"]} defaultValue={start} onChange={handleTimeChange} slotProps={{ toolbar: { hidden: true }, actionBar: () => ({ actions: [] }) }}></StaticDateTimePicker>
+                    <StaticDateTimePicker maxTime={start?.set("hour", 22)} minTime= {start?.set("hour",8)} minutesStep={60} ampm={false} views={["day", "hours"]} defaultValue={start} onChange={handleTimeChange} slotProps={{ toolbar: { hidden: true }, actionBar: () => ({ actions: [] }) }}></StaticDateTimePicker>
                 </Box>
             </DialogContent>
             <DialogActions>
