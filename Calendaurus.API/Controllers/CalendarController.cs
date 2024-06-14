@@ -29,7 +29,6 @@ public class CalendarController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [AllowAnonymous]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var result = await _calendarService.GetAsync(id);
@@ -57,10 +56,12 @@ public class CalendarController : ControllerBase
         var result = await _calendarService.DeleteAsync(id);
         return result is false ? BadRequest() : Ok();
     }
-    [HttpGet("{userId}/export")]
-    public async Task<IActionResult> GetExportedCalendar([FromRoute] Guid userId)
+    [HttpGet("{userEmail}/export")]
+    public async Task<IActionResult> GetExportedCalendar([FromRoute] string userEmail)
     {
-        var calendar = await _calendarService.ExportCalendar(userId);
+        var user = await _userRepository.GetByEmailAsync(userEmail);
+        if(user is null) return BadRequest();
+        var calendar = await _calendarService.ExportCalendar(user.Id);
         if(calendar.IsNullOrEmpty()) return BadRequest();
         var content = Encoding.UTF8.GetBytes(calendar);
         return File(content, "text/calendar", "calendar.ics");
