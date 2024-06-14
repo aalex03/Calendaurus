@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Menu, MenuItem } from "@mui/material"
+import { Box, Button, IconButton, Menu, MenuItem, Typography } from "@mui/material"
 import { ChevronLeft, ChevronRight, Logout } from "@mui/icons-material"
 import React, { useEffect } from "react";
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -6,15 +6,15 @@ import { useNavigate } from "react-router-dom";
 import { EventModal } from "./EventModal";
 import { ICalendarEntry } from "../types";
 import { useMsal } from "@azure/msal-react";
+import { getExportedCalendar } from "../Api/getExportedCalendar";
 
 export type HeaderProps = {
     changeWeekDates: (direction: string) => void,
     refetchEntries?: () => void;
 }
 
-export const Header = (props : HeaderProps) => {
-    const {instance} = useMsal();
-    const navigator = useNavigate();
+export const Header = (props: HeaderProps) => {
+    const { instance } = useMsal();
     const [userName, setUserName] = React.useState("");
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [openModal, setOpenModal] = React.useState(false);
@@ -22,9 +22,12 @@ export const Header = (props : HeaderProps) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
+    const handleExport = () => {
+        getExportedCalendar(instance);
+    }
     const handleClose = (event: any) => {
         setAnchorEl(null);
-        if(event.currentTarget.innerText === "Logout"){
+        if (event.currentTarget.innerText === "Logout") {
             instance.logoutPopup({
                 postLogoutRedirectUri: "/",
                 mainWindowRedirectUri: "/"
@@ -59,7 +62,7 @@ export const Header = (props : HeaderProps) => {
                 <Box sx={{ display: "flex", gap: 1 }}>
                     <Button variant="outlined" onClick={() => props.changeWeekDates("today")}>Today</Button>
                     <Button variant="contained" onClick={handleOpenModal}>New event</Button>
-                    <EventModal refetechEntries={props.refetchEntries} open={openModal} handleClose={handleCloseModal}/>
+                    <EventModal refetechEntries={props.refetchEntries} open={openModal} handleClose={handleCloseModal} />
                     <div>
                         <IconButton
                             aria-label="more"
@@ -81,7 +84,9 @@ export const Header = (props : HeaderProps) => {
                             }}
                         >
                             <MenuItem onClick={handleClose}>{userName}</MenuItem>
+                            <MenuItem onClick={handleExport}><Typography>Export calendar</Typography></MenuItem>
                             <MenuItem onClick={handleClose}><Logout />Logout</MenuItem>
+
                         </Menu>
                     </div>
                 </Box>
