@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typog
 import { ICalendarEntry } from "../types";
 import { Slot } from "./Slot";
 import { getDayHour } from "../utils";
+import dayjs, { Dayjs } from "dayjs";
 type CalendarProps = {
     weekDates: string[];
     calendarEntries?: ICalendarEntry[];
@@ -11,13 +12,16 @@ export const Calendar = (props: CalendarProps) => {
     const {calendarEntries, weekDates} = props;
     const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const hoursDay = ["08", "10", "12", "14", "16", "18", "20", "22"];
+    const todayWeekDay = weekDays[Number(dayjs().day())];
+    const todayDate = dayjs().format("Do MMMM");
+    const highlight = {backgroundColor: "#ADD8E6", borderRadius: "1rem"};
     return (
         <TableContainer>
             <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell></TableCell>
-                        {weekDays.map((day, index) => <TableCell key={index} >{day} <Typography>{weekDates[index]}</Typography></TableCell>)}</TableRow>
+                        {weekDays.map((day, index) => <TableCell key={index} style={(day === todayWeekDay && weekDates.includes(todayDate)) ? highlight : {}} >{day} <Typography>{weekDates[index]}</Typography></TableCell>)}</TableRow>
                 </TableHead>
                 <TableBody>
                     {hoursDay.map((hour, index) =>
