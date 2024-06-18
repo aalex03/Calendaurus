@@ -1,6 +1,8 @@
 namespace Calendaurus.API.Controllers;
 
+using System.Security.Claims;
 using System.Text;
+using Calendaurus.API.Migrations;
 using Calendaurus.Models;
 using Calendaurus.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -23,45 +25,61 @@ public class CalendarController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var currentUser = User.Identity!.Name!;
-        var user = await _userRepository.GetByEmailAsync(currentUser);
-        return user is null ? BadRequest() : Ok(await _calendarService.GetAllAsync());
+        var email = User.FindFirst(x => x.Type == "email")?.Value;
+        if (email is null) return BadRequest();
+        var user = await _userRepository.GetByEmailAsync(email);
+        return user is null ? BadRequest() : Ok(await _calendarService.GetAllAsync(user));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
-        var result = await _calendarService.GetAsync(id);
+        var email = User.FindFirst(x => x.Type == "email")?.Value;
+        if (email is null) return BadRequest();
+        var user = await _userRepository.GetByEmailAsync(email);
+        if (user is null) return BadRequest();
+        var result = await _calendarService.GetAsync(user, id);
         return result is null ? BadRequest() : Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CalendarEntryDto entryDto)
     {
-        var currentUser = User.Identity!.Name!;
-        var user = await _userRepository.GetByEmailAsync(currentUser);
-        return user is null ? BadRequest() : Ok(await _calendarService.CreateAsync(entryDto,user.Id));
+        var email = User.FindFirst(x => x.Type == "email")?.Value;
+        if (email is null) return BadRequest();
+        var user = await _userRepository.GetByEmailAsync(email);
+        return user is null ? BadRequest() : Ok(await _calendarService.CreateAsync(user, entryDto));
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CalendarEntryDto entryDto)
     {
-        var result = await _calendarService.UpdateAsync(id, entryDto);
+        var email = User.FindFirst(x => x.Type == "email")?.Value;
+        if (email is null) return BadRequest();
+        var user = await _userRepository.GetByEmailAsync(email);
+        if (user is null) return BadRequest();
+        var result = await _calendarService.UpdateAsync(user, id, entryDto);
         return result is null ? BadRequest() : Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await _calendarService.DeleteAsync(id);
+        var email = User.FindFirst(x => x.Type == "email")?.Value;
+        if (email is null) return BadRequest();
+        var user = await _userRepository.GetByEmailAsync(email);
+        if (user is null) return BadRequest();
+        var result = await _calendarService.DeleteAsync(user, id);
         return result is false ? BadRequest() : Ok();
     }
     [HttpGet("{userEmail}/export")]
     public async Task<IActionResult> GetExportedCalendar([FromRoute] string userEmail)
     {
+        var email = User.FindFirst(x => x.Type == "email")?.Value;
+        if (email is null || email != userEmail) return BadRequest();
         var user = await _userRepository.GetByEmailAsync(userEmail);
         if(user is null) return BadRequest();
-        var calendar = await _calendarService.ExportCalendar(user.Id);
+        var calendar = await _calendarService.ExportCalendar(user);
         if(calendar.IsNullOrEmpty()) return BadRequest();
         var content = Encoding.UTF8.GetBytes(calendar);
         return File(content, "text/calendar", "calendar.ics");
