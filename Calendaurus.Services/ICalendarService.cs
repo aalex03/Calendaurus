@@ -2,11 +2,11 @@ namespace Calendaurus.Services;
 using Calendaurus.Models;
 public interface ICalendarService
 {
-    Task<CalendarEntry?> GetAsync(Guid id);
-    Task<IEnumerable<CalendarEntry>> GetAllAsync();
-    Task<CalendarEntry?> CreateAsync(CalendarEntryDto entryDto, Guid userId);
-    Task<CalendarEntry?> UpdateAsync(Guid id, CalendarEntryDto entryDto);
-    Task<bool> DeleteAsync(Guid id);
-    Task<string> ExportCalendar(Guid userId);
+    Task<CalendarEntry?> GetAsync(User user, Guid id);
+    Task<IEnumerable<CalendarEntry>> GetAllAsync(User user);
+    Task<CalendarEntry?> CreateAsync(User user, CalendarEntryDto entryDto);
+    Task<CalendarEntry?> UpdateAsync(User user, Guid id, CalendarEntryDto entryDto);
+    Task<bool> DeleteAsync(User user, Guid id);
+    Task<string> ExportCalendar(User user);
 }
 

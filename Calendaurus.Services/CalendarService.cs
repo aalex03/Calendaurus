@@ -14,7 +14,7 @@ public class CalendarService : ICalendarService
         _repository = repository;
     }
 
-    public async Task<CalendarEntry?> CreateAsync(CalendarEntryDto entryDto, Guid userId)
+    public async Task<CalendarEntry?> CreateAsync(User user, CalendarEntryDto entryDto)
     {
         var entry = new CalendarEntry
         {
@@ -26,31 +26,39 @@ public class CalendarService : ICalendarService
             Updated = entryDto.Updated,
             Type = entryDto.Type,
             Location = entryDto.Location,
-            UserId = userId
+            UserId = user.Id,
+            User = user
         };
         var calendarEntries = await _repository.GetAsync(x => x.Location == entry.Location && entry.Start >= x.Start);
         return calendarEntries.Any() ? null : await _repository.CreateAsync(entry);
     }
 
-    public Task<bool> DeleteAsync(Guid id)
-    {
-        return _repository.DeleteAsync(id);
-    }
-
-    public Task<IEnumerable<CalendarEntry>> GetAllAsync()
-    {
-        return _repository.GetAllAsync();
-    }
-
-    public Task<CalendarEntry?> GetAsync(Guid id)
-    {
-        return _repository.GetAsync(id);
-    }
-
-    public async Task<CalendarEntry?> UpdateAsync(Guid id, CalendarEntryDto entryDto)
+    public async Task<bool> DeleteAsync(User user, Guid id)
     {
         var entry = await _repository.GetAsync(id);
-        if (entry == null)
+        if (entry == null || entry.UserId != user.Id)
+        {
+            return false;
+        }
+        return await _repository.DeleteAsync(id);
+    }
+
+    public async Task<IEnumerable<CalendarEntry>> GetAllAsync(User user)
+    {
+        var entries = await _repository.GetAllAsync();
+        return entries.Where(x => x.UserId == user.Id);
+    }
+
+    public async Task<CalendarEntry?> GetAsync(User user, Guid id)
+    {
+        var entry = await _repository.GetAsync(id);
+        return entry?.UserId == user.Id ? entry : null;
+    }
+
+    public async Task<CalendarEntry?> UpdateAsync(User user, Guid id, CalendarEntryDto entryDto)
+    {
+        var entry = await _repository.GetAsync(id);
+        if (entry == null || entry.UserId != user.Id)
         {
             return null;
         }
@@ -63,10 +71,10 @@ public class CalendarService : ICalendarService
         return await _repository.UpdateAsync(entry);
     }
 
-    public async Task<string> ExportCalendar(Guid userId)
+    public async Task<string> ExportCalendar(User user)
     {
         var entries = await _repository.GetAllAsync();
-        var userEntries = entries.Where(x => x.UserId == userId);
+        var userEntries = entries.Where(x => x.UserId == user.Id);
         var calendar = new Calendar();
         foreach (var entry in entries)
         {
