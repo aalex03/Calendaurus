@@ -1,13 +1,14 @@
 import { Edit, MoreVert, Remove } from "@mui/icons-material"
 import { Box, Button, Card, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grow, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from "@mui/material"
 import { ICalendarEntry } from "../types"
-import React from "react";
+import React, { ReactHTML } from "react";
 import { EventModal } from "./EventModal";
 import { deleteCalendarEntry } from "../Api/deleteCalendarEntry";
 import { useMsal } from "@azure/msal-react";
 export type PopulatedSlotButtonProps = {
     calendarEntry: ICalendarEntry;
     refetchEntries?: () => void;
+    highlight?: boolean;
 }
 
 export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
@@ -19,16 +20,14 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
     const [openInfoDialog, setOpenInfoDialog] = React.useState(false);
     const openMenu = Boolean(anchorEl);
     const handleCloseMenu = (event: React.MouseEvent<HTMLElement>) => {
-        event.stopPropagation();
+        
         if (event.currentTarget.textContent === "Edit") {
-            console.log("Edit");
             setOpenEditModal(true);
         }
         if (event.currentTarget.textContent === "Delete") {
-            console.log("Delete");
             setOpenDeleteModal(true);
         }
-        setAnchorEl(null);
+        event.stopPropagation();
     }
     const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
@@ -39,6 +38,7 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
         props.refetchEntries && props.refetchEntries();
     }
     const getBackgroundColor = (type: number) => {
+        if(props.highlight) return "#007BFF"; // light green
         switch (type) {
             case 0:
                 return "#FFA500"; // orange
@@ -64,13 +64,14 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
             default: return "";
         }
     }
-    function handleCardBodyClicked(): void {
+    function handleCardBodyClicked(event: React.MouseEvent<HTMLElement>): void {
+        event.stopPropagation();
         setOpenInfoDialog(true);
     }
 
     return (
         <>
-            <Card onClick={() => handleCardBodyClicked()} sx={{
+            <Card onClick={handleCardBodyClicked} sx={{
                 justifyContent: "space-around", display: "flex", backgroundColor: getBackgroundColor(props.calendarEntry.type), transition: 'transform 0.3s ease-in-out', // Smooth transform transition
                 '&:hover': {
                     transform: 'scale(1.03)', // Slightly grow on hover
@@ -87,11 +88,11 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
                     </Box>
                 </Box>
                 <Box>
-                    <IconButton onClick={handleClickMenu}>
+                    <IconButton onClick={(event) =>{event.stopPropagation(); handleClickMenu(event)}}>
                         <MoreVert />
                     </IconButton>
 
-                    <Menu open={openMenu} anchorEl={anchorEl} onClose={handleCloseMenu}>
+                    <Menu onClick={(event) => event.stopPropagation()} open={openMenu} anchorEl={anchorEl} onClose={handleCloseMenu}>
                         <MenuItem onClick={handleCloseMenu}>
                             <ListItemIcon>
                                 <Edit fontSize="small"></Edit>
@@ -105,7 +106,7 @@ export const PopulatedSlotButton = (props: PopulatedSlotButtonProps) => {
                             </ListItemIcon>
                             <ListItemText primary="Delete"></ListItemText>
                         </MenuItem>
-                        <Dialog open={openDeleteModal} onClose={() => { setOpenDeleteModal(false); setAnchorEl(null); }}>
+                        <Dialog open={openDeleteModal} onClick={(event) => event.stopPropagation()} onClose={() => {setOpenDeleteModal(false); setAnchorEl(null); }}>
                             <Typography sx={{ padding: "1rem" }}>Are you sure you want to delete this event?</Typography>
                             <Box sx={{ display: "flex", justifyContent: "space-around", padding: "1rem" }}>
                                 <IconButton onClick={() => { setOpenDeleteModal(false); setAnchorEl(null); }}>No</IconButton>
