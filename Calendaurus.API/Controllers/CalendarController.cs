@@ -84,4 +84,14 @@ public class CalendarController : ControllerBase
         var content = Encoding.UTF8.GetBytes(calendar);
         return File(content, "text/calendar", "calendar.ics");
     }
+    [HttpPost("signUp/{userEmail}")]
+    public async Task<IActionResult> SignUp([FromRoute] string userEmail)
+    {
+        var currentUserEmail = User.FindFirst(x => x.Type == "email")?.Value;
+        if (currentUserEmail is null || userEmail != currentUserEmail) return BadRequest();
+        var user = await _userRepository.GetByEmailAsync(userEmail);
+        if (user is not null) return BadRequest();
+        var result = await _userRepository.CreateAsync(userEmail);
+        return Ok(result);
+    }
 }
