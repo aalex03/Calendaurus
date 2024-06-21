@@ -26,38 +26,38 @@ public class CalendarController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var email = User.FindFirst(x => x.Type == "email")?.Value;
-        if (email is null) return BadRequest();
+        if (email is null) return BadRequest("Unauthorized");
         var user = await _userRepository.GetByEmailAsync(email);
-        return user is null ? BadRequest() : Ok(await _calendarService.GetAllAsync(user));
+        return user is null ? BadRequest("User does not exist") : Ok(await _calendarService.GetAllAsync(user));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var email = User.FindFirst(x => x.Type == "email")?.Value;
-        if (email is null) return BadRequest();
+        if (email is null) return BadRequest("Unauthorized");
         var user = await _userRepository.GetByEmailAsync(email);
-        if (user is null) return BadRequest();
+        if (user is null) return BadRequest("User does not exist");
         var result = await _calendarService.GetAsync(user, id);
-        return result is null ? BadRequest() : Ok(result);
+        return result is null ? BadRequest("Entry does not exist") : Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CalendarEntryDto entryDto)
     {
         var email = User.FindFirst(x => x.Type == "email")?.Value;
-        if (email is null) return BadRequest();
+        if (email is null) return BadRequest("Unauthorized");
         var user = await _userRepository.GetByEmailAsync(email);
-        return user is null ? BadRequest() : Ok(await _calendarService.CreateAsync(user, entryDto));
+        return user is null ? BadRequest("User does not exist") : Ok(await _calendarService.CreateAsync(user, entryDto));
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CalendarEntryDto entryDto)
     {
         var email = User.FindFirst(x => x.Type == "email")?.Value;
-        if (email is null) return BadRequest();
+        if (email is null) return BadRequest("Unauthorized");
         var user = await _userRepository.GetByEmailAsync(email);
-        if (user is null) return BadRequest();
+        if (user is null) return BadRequest("User does not exist");
         var result = await _calendarService.UpdateAsync(user, id, entryDto);
         return result is null ? BadRequest() : Ok(result);
     }
