@@ -29,7 +29,7 @@ public class CalendarService : ICalendarService
             UserId = user.Id,
             User = user
         };
-        var calendarEntries = await _repository.GetAsync(x => x.Location == entry.Location && entry.Start >= x.Start);
+        var calendarEntries = await _repository.GetAsync(x => x.Location == entry.Location && entry.Start == x.Start);
         return calendarEntries.Any() ? null : await _repository.CreateAsync(entry);
     }
 
