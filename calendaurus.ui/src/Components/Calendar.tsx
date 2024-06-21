@@ -7,6 +7,7 @@ type CalendarProps = {
     weekDates: string[];
     calendarEntries?: ICalendarEntry[];
     refetchEntries?: () => void;
+    highlightedDate? : {day: string, hour: number};
 }
 export const Calendar = (props: CalendarProps) => {
     const {calendarEntries, weekDates} = props;
@@ -14,14 +15,14 @@ export const Calendar = (props: CalendarProps) => {
     const hoursDay = ["08", "10", "12", "14", "16", "18", "20", "22"];
     const todayWeekDay = weekDays[Number(dayjs().day())];
     const todayDate = dayjs().format("Do MMMM");
-    const highlight = {backgroundColor: "#ADD8E6", borderRadius: "1rem"};
+    const highlight = {backgroundColor: "#ADD8AC", borderRadius: "1rem", padding: "0.5rem"};
     return (
         <TableContainer>
             <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell></TableCell>
-                        {weekDays.map((day, index) => <TableCell key={index} style={(day === todayWeekDay && weekDates.includes(todayDate)) ? highlight : {}} >{day} <Typography>{weekDates[index]}</Typography></TableCell>)}</TableRow>
+                        {weekDays.map((day, index) => <TableCell key={index} ><div style={(day === todayWeekDay && weekDates.includes(todayDate)) ? highlight : {}}>{day} <Typography>{weekDates[index]}</Typography></div></TableCell>)}</TableRow>
                 </TableHead>
                 <TableBody>
                     {hoursDay.map((hour, index) =>
@@ -35,7 +36,7 @@ export const Calendar = (props: CalendarProps) => {
                                             const entryDate = getDayHour(entry.start);
                                             if (entryDate.day === weekDates[index] && entryDate.hour === parseInt(hour)) {
                                                 slotAdded = true;
-                                                return (<Slot refetchEntries={props.refetchEntries} key={entry.id} calendarEntry={entry} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);
+                                                return (<Slot highlight={(entryDate.day === props.highlightedDate?.day && entryDate.hour === props.highlightedDate.hour)} refetchEntries={props.refetchEntries} key={entry.id} calendarEntry={entry} weekDate={weekDates[index]} hour={Number.parseInt(hour)}/>);
                                             }
                                             else return null;
                                         });

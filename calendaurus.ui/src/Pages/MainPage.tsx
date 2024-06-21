@@ -12,6 +12,7 @@ export type MainPageProps = {
 export const MainPage = (props : MainPageProps) => {
     const [weekDates, setWeekDates] = useState<string[]>([]);
     const {data: calendarData, isLoading, isError, refetch} = useCalendarQuery(props.instance);
+    const [highlightedDate, setHighlightedDate] = useState<{day: string, hour: number}>({day: "", hour: 0});
     const changeWeek = (direction: string) => {
         let newWeekDates: string[] = [];
         if (direction === "next") {
@@ -21,6 +22,14 @@ export const MainPage = (props : MainPageProps) => {
         } else if (direction === "today") {
             const startOfWeek = dayjs().startOf("week").add(1, "day");
             newWeekDates = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, "day").format("Do MMMM"));
+        } else{
+            try{
+            const startofWeek = dayjs(direction, "Do MMMM").startOf("week").add(1, "day");
+            newWeekDates = Array.from({ length: 7 }, (_, i) => startofWeek.add(i, "day").format("Do MMMM"));
+            }catch(e){
+                console.log(e);
+                alert("Could not find entry");
+           }
         }
         setWeekDates(newWeekDates);
     }
@@ -39,8 +48,8 @@ export const MainPage = (props : MainPageProps) => {
     }
     return (
         <div>
-            <Header refetchEntries = {refetch}changeWeekDates={changeWeek}/>
-            <Calendar refetchEntries = {refetch} weekDates={weekDates} calendarEntries={calendarData}/>
+            <Header setHighlightedEntry = {setHighlightedDate}refetchEntries = {refetch}changeWeekDates={changeWeek} calendarEntries={calendarData}/>
+            <Calendar highlightedDate={highlightedDate} refetchEntries = {refetch} weekDates={weekDates} calendarEntries={calendarData}/>
         </div>
     );
 }

@@ -7,12 +7,13 @@ type SlotProps = {
     calendarEntry? : ICalendarEntry,
     refetchEntries?: () => void,
     weekDate : string,
-    hour : number
+    hour : number,
+    highlight?: boolean
 }
 export const Slot = (props: SlotProps) => {
     const [open, setOpen] = React.useState(false);
     const {calendarEntry} = props;
-    return calendarEntry ? <PopulatedSlotButton refetchEntries={props.refetchEntries}calendarEntry={calendarEntry}/> : <EmptySlotButton refetchEntries={props.refetchEntries} weekdate= {props.weekDate} hour = {props.hour} openModal={open} onClose={function (): void {
+    return calendarEntry ? <PopulatedSlotButton highlight={props.highlight}refetchEntries={props.refetchEntries}calendarEntry={calendarEntry}/> : <EmptySlotButton refetchEntries={props.refetchEntries} weekdate= {props.weekDate} hour = {props.hour} openModal={open} onClose={function (): void {
         setOpen(false);
     } } handleOpenModal={function (): void {
         setOpen(true);
