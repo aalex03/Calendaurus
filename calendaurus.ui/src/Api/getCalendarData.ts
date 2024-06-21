@@ -4,6 +4,7 @@ import { ICalendarEntry } from "../types";
 import { useQuery } from "react-query";
 import { IPublicClientApplication } from "@azure/msal-browser";
 import dayjs from "dayjs";
+import { postSignUp } from "./postSignUp";
 
 export async function getEntries(instance: IPublicClientApplication) {
     const url = "https://localhost:7165/api/Calendar";
@@ -14,6 +15,13 @@ export async function getEntries(instance: IPublicClientApplication) {
             Authorization: `Bearer ${await prepareToken(instance)}`
         }
     });
+    if(response.status === 400){
+        const responseBody = await response.text();
+        if(responseBody === "User does not exist"){
+            postSignUp(instance);
+            alert("You have been signed up for the calendar. Please try again.")
+        }
+    }
     const responseData = await response.json() as ICalendarEntry[];
     const entries = responseData.map((entry) => {
         return {
@@ -23,7 +31,6 @@ export async function getEntries(instance: IPublicClientApplication) {
             updated: dayjs(entry.updated)
         }
     });
-    console.log(entries);
     return entries;
 }
 
