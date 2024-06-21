@@ -12,5 +12,4 @@ export const postCalendarEntryMutation = async (instance : IPublicClientApplicat
         },
         body: JSON.stringify(entry)
     });
-    return await response.json();
 }

@@ -62,7 +62,7 @@ export const EventModal = (props: EventModalProps) => {
     return (
         <Dialog open={props.open} onClose={props.handleClose}>
             <DialogTitle>
-                Add a new event
+                {props.edit ? "Edit Event" : "Add Event"}
             </DialogTitle>
             <DialogContent>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: "2" }}>
