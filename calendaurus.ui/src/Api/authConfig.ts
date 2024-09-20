@@ -7,7 +7,7 @@ import { Configuration } from "@azure/msal-browser";
  */
 export const msalConfig: Configuration = {
   auth: {
-    clientId: "be8fb141-1de4-47e6-b6eb-83b069827245",
+    clientId: "0b6d3a42-5714-4a7b-903f-39f8405f8e43",
     authority: "https://login.microsoftonline.com/consumers",
     redirectUri: process.env.REACT_APP_URL,
     // clientSecret: 
