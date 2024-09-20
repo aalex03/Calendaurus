@@ -5,7 +5,7 @@ import { ICalendarEntry } from "../types";
 export const postSignUp = async (instance : IPublicClientApplication) => {
     const user = sessionStorage.getItem("user");
     const email = JSON.parse(user!).username;
-    const url = `${process.env.REACT_API_URL}/api/Calendar/signUp/${email}`;
+    const url = `${process.env.REACT_APP_API_URL}/api/Calendar/signUp/${email}`;
     const response = await fetch(url, {
         method: "POST",
         headers: {

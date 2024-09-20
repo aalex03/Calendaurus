@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { postSignUp } from "./postSignUp";
 
 export async function getEntries(instance: IPublicClientApplication) {
-    const url = `${process.env.REACT_API_URL}/api/Calendar`;
+    const url = `${process.env.REACT_APP_API_URL}/api/Calendar`;
     const response = await fetch(url, {
         method: "GET",
         headers: {

@@ -6,7 +6,7 @@ import { prepareToken } from "./authUtils";
 export async function getExportedCalendar(instance: IPublicClientApplication) {
     const user = sessionStorage.getItem("user");
     const userEmail = user ? JSON.parse(user).username : "";
-    const url = `${process.env.REACT_API_URL}/api/Calendar/${userEmail}/export`;
+    const url = `${process.env.REACT_APP_API_URL}/api/Calendar/${userEmail}/export`;
     const response = await fetch(url, {
         method: "GET",
         headers: {
