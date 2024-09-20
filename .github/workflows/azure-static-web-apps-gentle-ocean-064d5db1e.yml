@@ -38,6 +38,9 @@ jobs:
             CI=false npm install
             CI=false npm run build
           ###### End of Repository/Build Configurations ######
+        env:
+            REACT_API_URL: ${{ vars.REACT_API_URL }}
+            REACT_APP_URL: ${{ vars.REACT_APP_URL }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

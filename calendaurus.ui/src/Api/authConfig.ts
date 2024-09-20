@@ -9,7 +9,7 @@ export const msalConfig: Configuration = {
   auth: {
     clientId: "be8fb141-1de4-47e6-b6eb-83b069827245",
     authority: "https://login.microsoftonline.com/consumers",
-    redirectUri: "http://localhost:3000",
+    redirectUri: process.env.REACT_APP_URL,
     // clientSecret: 
   },
   cache: {
