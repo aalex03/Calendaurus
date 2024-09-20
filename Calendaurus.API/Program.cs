@@ -46,7 +46,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<ICalendarService, CalendarService>();
 builder.Services.AddScoped<IRepository<CalendarEntry>, CalendarEntryEfRepository<CalendarEntry>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddDbContext<CalendaurusContext>(options => options.UseSqlServer("Server=localhost;Database=Calendaurus;User Id=sa;Password=Alex123.;Encrypt=False", b => b.MigrationsAssembly("Calendaurus.API")));
+builder.Services.AddDbContext<CalendaurusContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Calendaurus.API")));
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(options =>
