@@ -72,7 +72,7 @@ if (app.Environment.IsDevelopment())
     {
         options.OAuthAppName("Swagger Client");
         options.OAuthClientId(builder.Configuration.GetValue<string>("AzureAd:ClientId"));
-        options.OAuthScopes("openid", "email", "api://be8fb141-1de4-47e6-b6eb-83b069827245/Calendaurus.API");
+        options.OAuthScopes("openid", "email", "api://0b6d3a42-5714-4a7b-903f-39f8405f8e43/Calendaurus.API");
         options.OAuthClientSecret(builder.Configuration.GetValue<string>("AzureAd:Secret"));
         options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
     });
